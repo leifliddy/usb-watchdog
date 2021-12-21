@@ -1,0 +1,14 @@
+[Unit]
+Description=USB Watchdog
+
+[Service]
+Type=exec
+User=root
+Group=root
+ExecStart=/usr/local/sbin/usb_watchdog.py
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
