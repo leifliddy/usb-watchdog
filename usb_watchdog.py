@@ -12,7 +12,7 @@ import usb.util
 from datetime import datetime
 
 
-def FatalError(message=None):
+def fatal_error(message=None):
     """ This displays a text message and forces the program to exit with an error. """
     felogger = logging.getLogger('FatalError')
     # Wrapping this in a 'try' to silence any exceptions we trigger here.
@@ -29,14 +29,13 @@ def FatalError(message=None):
             # Not blocking the console text here, because I consider
             # an undefined issue to be a big issue.
             felogger.error('No descriptive text provided')
-        usbcleanup()
+        usb_cleanup()
     except:
         pass
     sys.exit(1)
 
 #############################################################################
 
-# From https://www.pythoncentral.io/how-to-implement-an-enum-in-python/
 def enum(*args):
     # Used to declare an 'enum' dynamically
     enums = dict(zip(args, range(len(args))))
@@ -52,7 +51,7 @@ def get_date():
 
 #############################################################################
 
-def SendAndReceive(ep_out, ep_in, dout):
+def send_and_receive(ep_out, ep_in, dout):
     # Send a packet and return the USB device's reply as a string
     logging.debug('TX  0x' + str(dout.hex()))
     ep_out.write(dout)
@@ -64,11 +63,11 @@ def SendAndReceive(ep_out, ep_in, dout):
 
 #############################################################################
 
-def SendAndCompare(ep_out, ep_in, dout):
+def send_and_compare(ep_out, ep_in, dout):
     # Send a packet and expect the USB device to reply with the same packet.
     # If the reply differs that usually seems to indicate a problem.
     
-    din_hex = SendAndReceive(ep_out, ep_in, dout)
+    din_hex = send_and_receive(ep_out, ep_in, dout)
     dout_hex = dout.hex()
 
     if dout_hex != din_hex:
@@ -77,7 +76,7 @@ def SendAndCompare(ep_out, ep_in, dout):
 
 #############################################################################
 
-def DrainUSB(ep_in):
+def drain_usb(ep_in):
     # Read and discard anything waiting at the USB device.
     # Setting a short timep_out period so we don't waste time.
     # Stopping at 256 reads just to prevent infinite loops.
@@ -92,7 +91,7 @@ def DrainUSB(ep_in):
 
 #############################################################################   
 
-def usbinit(usb_vendor_id, usb_product_id, quiet=False):
+def usb_init(usb_vendor_id, usb_product_id, quiet=False):
     # Convert usb_vendor_id and usb_product_id hex string to integers
 
     if isinstance(usb_vendor_id, str):    
@@ -153,12 +152,12 @@ def usbinit(usb_vendor_id, usb_product_id, quiet=False):
 
     # Read from the USB device until its buffer is empty.
     # I have no idea if this is actually needed or not.
-    DrainUSB(ep_in)
+    drain_usb(ep_in)
     return dev, ep_out, ep_in
 
 #############################################################################   
 
-def usbcleanup():
+def usb_cleanup():
     # Clean up as best we can, ignoring _all_ errors but honoring Ctrl+C
     # (Keyboard Interrupt).  Uses the global 'dev'
     global dev
@@ -248,7 +247,7 @@ def main():
     dev = None
     while True:
         try:
-            dev, ep_out, ep_in = usbinit(args.usbvendor, args.usbproduct, quiet=args.quiet)
+            dev, ep_out, ep_in = usb_init(args.usbvendor, args.usbproduct, quiet=args.quiet)
             laststatus=State.CONNECTED
 
             logging.debug('usb_vendor_id: ' + usb_vendor_id)
@@ -259,14 +258,14 @@ def main():
             while True:
                 if args.restart:
                     logging.info('Restarting system...')    
-                    SendAndCompare(ep_out, ep_in, restart)
+                    send_and_compare(ep_out, ep_in, restart)
                     sys.exit()
 
                 if not args.quiet:
                     date = get_date()
                     logging.info(date + ': Pinging!')
             
-                SendAndCompare(ep_out, ep_in, ping)
+                send_and_compare(ep_out, ep_in, ping)
 
                 time.sleep(args.interval)
         except ValueError as e:
@@ -281,7 +280,7 @@ def main():
                 logging.error('USB communication error or device removed.')
                 logging.debug('Encountered USBError:\n'+repr(e)+'\n')
         # Clean up as best we can and try again
-        usbcleanup()
+        usb_cleanup()
         # If our first effort to find the module failed we should give
         # some indication that we are, in fact, trying.
         if laststatus == State.STARTUP:
@@ -293,7 +292,7 @@ def main():
     # Test a range of inputs and show the reply from the module
     #print('Dec\tHex\tReply\tBinary')
     #for x in range(126,256):
-        #ret=SendAndReceive(epout, epin, chr(x))
+        #ret=send_and_receive(epout, epin, chr(x))
         #rethex=toHex(ret)
         #retbin=bin(int(rethex,16))[2:].zfill(16)
         #print(str(x)+'\t'+hex(x)[:4]+'\t0x'+rethex[:4])
@@ -313,6 +312,6 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         print('\n')
-        FatalError('User pressed CTRL+C, aborting...')
+        fatal_error('User pressed CTRL+C, aborting...')
     #except Exception as e:
-        #FatalError('Exception: ' + repr(e))
+        #fatal_error('Exception: ' + repr(e))
