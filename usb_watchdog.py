@@ -17,7 +17,7 @@ def FatalError(message=None):
     felogger = logging.getLogger('FatalError')
     # Wrapping this in a 'try' to silence any exceptions we trigger here.
     # This is part of silently quitting when we trap CTRL+C
-    try:            #print('epinxxxx\n', epin.bEndpointAddress)
+    try:
         if message:
             # I prefer this format on screen.
             print('\nFATAL ERROR: ' + message, file=sys.stderr)
