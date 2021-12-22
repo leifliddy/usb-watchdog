@@ -92,15 +92,15 @@ def DrainUSB(ep_in):
 
 #############################################################################   
 
-def usbinit(usb_vendor_id, usb_prodcut_id, quiet=False):
-    # Convert usb_vendor_id and usb_prodcut_id hex string to integers
+def usbinit(usb_vendor_id, usb_product_id, quiet=False):
+    # Convert usb_vendor_id and usb_product_id hex string to integers
 
     if isinstance(usb_vendor_id, str):    
         usb_vendor_id = int(usb_vendor_id,16)
-    if isinstance(usb_prodcut_id, str):            
-        usb_prodcut_id = int(usb_prodcut_id,16)
-    logging.debug('Looking for device with idVendor ' + hex(usb_vendor_id) + ', idProduct ' + hex(usb_prodcut_id))
-    dev = usb.core.find(idVendor=usb_vendor_id,idProduct=usb_prodcut_id)
+    if isinstance(usb_product_id, str):            
+        usb_product_id = int(usb_product_id,16)
+    logging.debug('Looking for device with idVendor ' + hex(usb_vendor_id) + ', idProduct ' + hex(usb_product_id))
+    dev = usb.core.find(idVendor=usb_vendor_id,idProduct=usb_product_id)
 
     if dev is None:
         raise usb.USBError('Device not found')
@@ -118,7 +118,6 @@ def usbinit(usb_vendor_id, usb_prodcut_id, quiet=False):
         else:
             logging.debug('Device not claimed by a kernel driver')
     except NotImplementedError:
-        # Windows systems may not have a driver that claims it by default
         # Linux systems seem to attach the HID driver as a last resort
         pass
 
@@ -188,7 +187,7 @@ def main():
     global dev
 
     cfgusb_vendor_id  = '0x5131'
-    cfgusb_prodcut_id = '0x2007'
+    cfgusb_product_id = '0x2007'
     #ping       = b'\x1e\x00'
     #restart    = b'\xff\x55'
     ping_hex    = ['0x1e', '0x00']
@@ -206,7 +205,7 @@ def main():
     parser.add_argument('-r','--restart', action='store_true', help='Restart system via the watchdog USB device')
     parser.add_argument('-d','--debug', action='store_true', help='Output verbose debugging information')
     parser.add_argument('-u', '--usbvendor', action='store', type=str, default=cfgusb_vendor_id, help='USB Vendor ID like 5131')
-    parser.add_argument('-p', '--usbproduct', action='store', type=str, default=cfgusb_prodcut_id, help='USB Product ID like 2007')
+    parser.add_argument('-p', '--usbproduct', action='store', type=str, default=cfgusb_product_id, help='USB Product ID like 2007')
     args = parser.parse_args()
 
 
@@ -266,7 +265,6 @@ def main():
                 if not args.quiet:
                     date = get_date()
                     logging.info(date + ': Pinging!')
-                    #print(date + ': Pinging!')
             
                 SendAndCompare(ep_out, ep_in, ping)
 
