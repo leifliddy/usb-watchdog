@@ -6,9 +6,9 @@ import errno
 import logging
 import os
 import sys
+import time
 import usb.core
 import usb.util
-import time
 from datetime import datetime
 
 
