@@ -265,7 +265,8 @@ def main():
 
                 if not args.quiet:
                     date = get_date()
-                    print(date + ': Pinging!')
+                    logging.info(date + ': Pinging!')
+                    #print(date + ': Pinging!')
             
                 SendAndCompare(ep_out, ep_in, ping)
 
