@@ -252,8 +252,7 @@ def main():
             dev, ep_out, ep_in = usbinit(args.usbvendor, args.usbproduct, quiet=args.quiet)
             laststatus=State.CONNECTED
 
-            logging.debug('usb_ve[leif.liddy@black tmp]$ ^C
-[leif.liddy@black tmp]$ sudo ./usb_watchdog.ndor_id:  ' + usb_vendor_id)
+            logging.debug('usb_vendor_id: ' + usb_vendor_id)
             logging.debug('usb_product_id: ' + usb_product_id + '\n')
             logging.debug('ep_out\n' + str(ep_out) + '\n')
             logging.debug('ep_in\n' + str(ep_in) + '\n')
