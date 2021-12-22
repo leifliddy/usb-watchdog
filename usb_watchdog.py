@@ -255,7 +255,7 @@ def main():
             logging.debug('usb_product_id: ' + usb_product_id + '\n')
             logging.debug('ep_out\n' + str(ep_out) + '\n')
             logging.debug('ep_in\n' + str(ep_in) + '\n')
-            #print('epinxxxx\n', epin.bEndpointAddress)
+
             while True:
                 if args.restart:
                     logging.info('Restarting system...')    
