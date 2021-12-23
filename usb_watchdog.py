@@ -46,7 +46,7 @@ def enum(*args):
 def get_date():
     # format: Dec 20 07:38:10
     date = datetime.today().strftime('%b %d %H:%M:%S')
-    
+
     return date
 
 #############################################################################
@@ -66,7 +66,7 @@ def send_and_receive(ep_out, ep_in, dout):
 def send_and_compare(ep_out, ep_in, dout):
     # Send a packet and expect the USB device to reply with the same packet.
     # If the reply differs that usually seems to indicate a problem.
-    
+
     din_hex = send_and_receive(ep_out, ep_in, dout)
     dout_hex = dout.hex()
 
@@ -89,14 +89,14 @@ def drain_usb(ep_in):
         logging.debug('Finished attempts to drain')
         pass
 
-#############################################################################   
+#############################################################################
 
 def usb_init(usb_vendor_id, usb_product_id, quiet=False):
     # Convert usb_vendor_id and usb_product_id hex string to integers
 
-    if isinstance(usb_vendor_id, str):    
+    if isinstance(usb_vendor_id, str):
         usb_vendor_id = int(usb_vendor_id,16)
-    if isinstance(usb_product_id, str):            
+    if isinstance(usb_product_id, str):
         usb_product_id = int(usb_product_id,16)
     logging.debug('Looking for device with idVendor ' + hex(usb_vendor_id) + ', idProduct ' + hex(usb_product_id))
     dev = usb.core.find(idVendor=usb_vendor_id,idProduct=usb_product_id)
@@ -155,7 +155,7 @@ def usb_init(usb_vendor_id, usb_product_id, quiet=False):
     drain_usb(ep_in)
     return dev, ep_out, ep_in
 
-#############################################################################   
+#############################################################################
 
 def usb_cleanup():
     # Clean up as best we can, ignoring _all_ errors but honoring Ctrl+C
@@ -178,15 +178,15 @@ def usb_cleanup():
         pass
 
 #############################################################################
-# Begin main code 
+# Begin main code
 #############################################################################
 
 def main():
     # We'll be referencing the existing globally-defined 'dev' variable
     global dev
 
-    cfgusb_vendor_id  = '0x5131'
-    cfgusb_product_id = '0x2007'
+    usb_vendor_id  = '0x5131'
+    usb_product_id = '0x2007'
     #ping       = b'\x1e\x00'
     #restart    = b'\xff\x55'
     ping_hex    = ['0x1e', '0x00']
@@ -199,12 +199,13 @@ def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, add_help=False)
 
     parser.add_argument('-h','--help', action='help', help='Show this help message and exit')
-    parser.add_argument('-i', '--interval',  action='store', type=int, default=10, help='Watchdog ping interval in seconds (must be between 1 and 299)')    
+    parser.add_argument('-i', '--interval', action='store', type=int, default=10, help='Watchdog ping interval in seconds, needs to be under 300, default value: 10')
     parser.add_argument('-q','--quiet', action='store_true', help='Silences all output')
     parser.add_argument('-r','--restart', action='store_true', help='Restart system via the watchdog USB device')
     parser.add_argument('-d','--debug', action='store_true', help='Output verbose debugging information')
-    parser.add_argument('-u', '--usbvendor', action='store', type=str, default=cfgusb_vendor_id, help='USB Vendor ID like 5131')
-    parser.add_argument('-p', '--usbproduct', action='store', type=str, default=cfgusb_product_id, help='USB Product ID like 2007')
+    parser.add_argument('-u', '--usbvendor', action='store', type=str, default=usb_vendor_id, help='usb vendor id, default value: 5131')
+    parser.add_argument('-p', '--usbproduct', action='store', type=str, default=usb_product_id, help='usb product id, default value: 2007')
+
     args = parser.parse_args()
 
 
@@ -257,14 +258,14 @@ def main():
 
             while True:
                 if args.restart:
-                    logging.info('Restarting system...')    
+                    logging.info('Restarting system...')
                     send_and_compare(ep_out, ep_in, restart)
                     sys.exit()
 
                 if not args.quiet:
                     date = get_date()
                     logging.info(date + ': Pinging!')
-            
+
                 send_and_compare(ep_out, ep_in, ping)
 
                 time.sleep(args.interval)
