@@ -73,5 +73,5 @@ Dec 22 08:53:59 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:
 
 I'll adjust the logging in a future update to make it systemd compatible and to not print the date/time (as systemd does that already)  
 
-Also, you can start the ```usb_watchdog``` service without needing the usb-watchdog device plugged in.  
+Also, you can start the ```usb_watchdog``` service without needing the usb-watchdog device to be plugged in.  
 If/when the device is plugged in at a later time, the service will identify, connect, and start communicating with it.
