@@ -10,11 +10,12 @@ It's confusing as there seems to be many devices like this on the market using t
 The main difference between this device and ```Progman2K's``` device is the command format 
 
 This device accepts the following commands comprised of two bytes:  
-**ping or hearbeat:** ['0x1e', '0x00']  
+**ping/hearbeat:** ['0x1e', '0x00']  
 **restart:** ['0xff', '0x55']
 
 If the device doesn't receive a ping/heartbeat message within a ```5 minute / 300 second``` period, the relays will be triggered, causing the system to reboot. 
-
+After a ping/heartbeat is sent to the usb watchdog device, a read operation is perform on the device to confirm that is actually recieved the command. 
+If these values differ, an error message will display stating that the TX and RX values differ. 
 
 This script requiress the ```pyusb``` python library to run.  
 You can install it via your distro's package management tool or via pip3
@@ -47,3 +48,25 @@ options:
 
 You can physically verify whether the ping/heartbeart messages are being received correctly by the usb-watchdog device.
 Each time the device successfully receives a ping/heartbeat message, the blue led on the device will blink.
+
+
+**setup the usb_watchdog service**  
+```
+git clone https://github.com/leifliddy/usb-watchdog.git
+cd usb-watchdog
+
+sudo cp usb_watchdog.py /usr/local/sbin/
+sudo cp usb_watchdog.service /etc/systemd/system/
+systemctl enable --now usb_watchdog.service
+```
+
+running ```journalctl -f``` will show you the ping intervals
+```
+Dec 22 08:53:19 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:19: Pinging!
+Dec 22 08:53:29 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:29: Pinging!
+Dec 22 08:53:39 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:39: Pinging!
+Dec 22 08:53:49 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:49: Pinging!
+Dec 22 08:53:59 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:59: Pinging!
+```
+
+I'll adjust the logging in a future uppdate to make it systemd compatible. 
