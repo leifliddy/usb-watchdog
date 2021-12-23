@@ -4,11 +4,11 @@ This project support the following usb-watchdog device:
 
 ```ID 5131:2007 MSR MSR-101U Mini HID magnetic card reader```
 
-and is based heavily off of Progman2K's repo https://github.com/Progman2k/USB_Watchdog
+and is based heavily off of ```Progman2K's``` repo https://github.com/Progman2k/USB_Watchdog
 
 It's confusing because there seems to be many devices like this on the market using the same ```5131:2007``` id. 
 
-The main difference between the device this repo support and Progman2K's device is the command format 
+The main difference between the device this repo supports and ```Progman2K's``` device is the command format 
 
 The device this repo suuports accepts commands comprised of two bytes:  
 **ping or hearbeat:** ['0x1e', '0x00']  
@@ -47,5 +47,4 @@ options:
 ```
 
 You can physically verify whether the ping/heartbeart messages and being received correctly on the device.
-Ever time the device successfully receives a ping/heartbeat message, the blue led on the device will blink. 
-
+Ever time the device successfully receives a ping/heartbeat message, the blue led on the device will blink.
