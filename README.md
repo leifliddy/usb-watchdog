@@ -7,9 +7,9 @@ and supports the following (HID) usb-watchdog device:
 
 It's confusing as there seems to be many devices like this on the market using the same ```5131:2007``` id. 
 
-The main difference between the device this repo supports and ```Progman2K's``` device is the command format 
+The main difference between this device and ```Progman2K's``` device is the command format 
 
-The device this repo suuports accepts commands comprised of two bytes:  
+This device accepts commands comprised of two bytes:  
 **ping or hearbeat:** ['0x1e', '0x00']  
 **restart:** ['0xff', '0x55']
 
