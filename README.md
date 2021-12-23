@@ -1,12 +1,11 @@
 # usb-watchdog
 
-This project support the following usb-watchdog device:  
+This project is largley based off of ```Progman2K's``` repo https://github.com/Progman2k/USB_Watchdog   
+and supports the following (HID) usb-watchdog device:  
 
 ```ID 5131:2007 MSR MSR-101U Mini HID magnetic card reader```
 
-and is based heavily off of ```Progman2K's``` repo https://github.com/Progman2k/USB_Watchdog
-
-It's confusing because there seems to be many devices like this on the market using the same ```5131:2007``` id. 
+It's confusing as there seems to be many devices like this on the market using the same ```5131:2007``` id. 
 
 The main difference between the device this repo supports and ```Progman2K's``` device is the command format 
 
