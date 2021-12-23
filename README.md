@@ -38,7 +38,7 @@ usage: usb_watchdog.py [-h] [-i INTERVAL] [-q] [-r] [-d] [-u USBVENDOR] [-p USBP
 options:
   -h, --help            Show this help message and exit
   -i INTERVAL, --interval INTERVAL
-                        Wausb_watchdogtchdog ping interval in seconds, needs to be under 300, default value: 10
+                        usb_watchdog ping interval in seconds, needs to be under 300, default value: 10
   -q, --quiet           Silences all output
   -r, --restart         Restart system via the watchdog USB device
   -d, --debug           Output verbose debugging information
