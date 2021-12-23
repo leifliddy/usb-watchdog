@@ -16,7 +16,7 @@ This device accepts the following commands comprised of two bytes:
 If the device doesn't receive a ping/heartbeat message within a ```5 minute / 300 second``` period, the relays will be triggered, causing the system to reboot. 
 
 
-This script requiress the ```pyusb``` python library to run. 
+This script requiress the ```pyusb``` python library to run.  
 You can install it via your distro's package management tool or via pip3
 
 **fedora package install**  
