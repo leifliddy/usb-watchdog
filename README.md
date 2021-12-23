@@ -9,7 +9,7 @@ It's confusing as there seems to be many devices like this on the market using t
 
 The main difference between this device and ```Progman2K's``` device is the command format 
 
-This device accepts commands comprised of two bytes:  
+This device accepts the following commands comprised of two bytes:  
 **ping or hearbeat:** ['0x1e', '0x00']  
 **restart:** ['0xff', '0x55']
 
