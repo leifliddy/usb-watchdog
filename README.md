@@ -13,7 +13,7 @@ This device accepts commands comprised of two bytes:
 **ping or hearbeat:** ['0x1e', '0x00']  
 **restart:** ['0xff', '0x55']
 
-If the device doesn't receive a ping/heartbeat message within a 5 minutes period, the relays will be triggered, causing the system to reboot. 
+If the device doesn't receive a ping/heartbeat message within a ```5 minute / 300 second``` period, the relays will be triggered, causing the system to reboot. 
 
 
 This script requiress the ```pyusb``` python library to run. 
