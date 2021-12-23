@@ -45,5 +45,5 @@ options:
                         usb product id, default value: 2007
 ```
 
-You can physically verify whether the ping/heartbeart messages and being received correctly on the device.
-Ever time the device successfully receives a ping/heartbeat message, the blue led on the device will blink.
+You can physically verify whether the ping/heartbeart messages are being received correctly by the usb-watchdog device.
+Each time the device successfully receives a ping/heartbeat message, the blue led on the device will blink.
