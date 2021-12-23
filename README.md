@@ -5,6 +5,8 @@ and supports the following (HID) usb-watchdog device:
 
 ```ID 5131:2007 MSR MSR-101U Mini HID magnetic card reader```
 
+\*\*use the ```lsusb``` command to find connected usb device info
+
 It's confusing as there seems to be many devices like this on the market using the same ```5131:2007``` id. 
 
 The main difference between this device and ```Progman2K's``` device is the command format 
