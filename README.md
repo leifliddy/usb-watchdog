@@ -13,8 +13,8 @@ This device accepts the following commands comprised of two bytes:
 **ping/hearbeat:** ['0x1e', '0x00']  
 **restart:** ['0xff', '0x55']
 
-If the device doesn't receive a ping/heartbeat message within a ```5 minute / 300 second``` period, the relays will be triggered, causing the system to reboot. 
-After a ping/heartbeat is sent to the usb watchdog device, a read operation is perform on the device to confirm that is actually recieved the command. 
+If the device doesn't receive a ping/heartbeat message within a ```5 minute / 300 second``` period, the relays will be triggered, causing the system to reboot.   
+After a ping/heartbeat is sent to the usb watchdog device, a read operation is perform on the device to confirm that it recieved the command.  
 If these values differ, an error message will display stating that the TX and RX values differ. 
 
 This script requiress the ```pyusb``` python library to run.  
@@ -69,4 +69,7 @@ Dec 22 08:53:49 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:
 Dec 22 08:53:59 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:59: Pinging!
 ```
 
-I'll adjust the logging in a future uppdate to make it systemd compatible. 
+I'll adjust the logging in a future update to make it systemd compatible. 
+
+Also, you can start the service without needing the usb-watchdog plugged in. 
+When/if the device is plugged in at a later time, the service will identify, connect, and start communicating with it. 
