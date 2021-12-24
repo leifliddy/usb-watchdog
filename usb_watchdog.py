@@ -10,6 +10,7 @@ import time
 import usb.core
 import usb.util
 from datetime import datetime
+from systemd import journal
 
 
 def fatal_error(message=None):
@@ -38,6 +39,7 @@ def fatal_error(message=None):
 
 def enum(*args):
     # Used to declare an 'enum' dynamically
+
     enums = dict(zip(args, range(len(args))))
     return type('Enum', (), enums)
 
@@ -141,7 +143,7 @@ def usb_init(usb_vendor_id, usb_product_id, quiet=False):
 
     ep_in = usb.util.find_descriptor(
         intf,
-        # match the first IN endpoint
+        # match the first IN endpointexe=
         custom_match = \
         lambda e: \
             usb.util.endpoint_direction(e.bEndpointAddress) == \
@@ -203,6 +205,8 @@ def main():
     parser.add_argument('-q','--quiet', action='store_true', help='Silences all output')
     parser.add_argument('-r','--restart', action='store_true', help='Restart system via the watchdog USB device')
     parser.add_argument('-d','--debug', action='store_true', help='Output verbose debugging information')
+    parser.add_argument('--date', action='store_true', help='Output date/time with each logging entry')
+    parser.add_argument('-s','--systemd', action='store_true', help='Use systemd/journal logging mechanism')
     parser.add_argument('-u', '--usbvendor', action='store', type=str, default=usb_vendor_id, help='usb vendor id, default value: 5131')
     parser.add_argument('-p', '--usbproduct', action='store', type=str, default=usb_product_id, help='usb product id, default value: 2007')
 
@@ -219,29 +223,26 @@ def main():
 
     if args.usbproduct:
         usb_product_id = hex(int(args.usbproduct, 16))
-    # Logging hierarchy, for reference
-    #   CRITICAL   50
-    #   ERROR      40
-    #   WARNING    30
-    #   INFO       20
-    #   DEBUG      10
-    #   NOTSET      0
-    # We set the logger object to accept Info and above only...
-    # (Old format string: '%(name)-8s %(levelname)-8s %(message)s' )
-    logging.basicConfig(format='%(levelname)-8s %(message)s',level=logging.INFO)
-    # ...then we set its auto-created StreamHandler to Debug and above only.
-    logging.getLogger().handlers[0].setLevel(logging.DEBUG)
-    # This has the effect of making the logger accept everything but debug by
-    # default, but will allow on-screen debug output if enabled later.
 
 
-    if args.quiet:
-        # Setting this to a value never used in the program
-        logging.getLogger().setLevel(logging.CRITICAL)
+    logger = logging.getLogger()
+
+    if args.systemd:
+        logger.addHandler(journal.JournalHandler(SYSLOG_IDENTIFIER='usb_watchdog'))
+    else:
+        # create console handler and set level to debug
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(levelname)-8s %(message)s')
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+
 
     if args.debug:
-        # Enable Debug level (and up) at the root logger
-        logging.getLogger().setLevel(logging.DEBUG)
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
+
 
     State = enum('STARTUP', 'DISCONNECTED', 'CONNECTED')
     laststatus=State.STARTUP
@@ -251,6 +252,7 @@ def main():
             dev, ep_out, ep_in = usb_init(args.usbvendor, args.usbproduct, quiet=args.quiet)
             laststatus=State.CONNECTED
 
+
             logging.debug('usb_vendor_id: ' + usb_vendor_id)
             logging.debug('usb_product_id: ' + usb_product_id + '\n')
             logging.debug('ep_out\n' + str(ep_out) + '\n')
@@ -258,13 +260,15 @@ def main():
 
             while True:
                 if args.restart:
-                    logging.info('Restarting system...')
+                    logging.info('restarting system...')
                     send_and_compare(ep_out, ep_in, restart)
                     sys.exit()
 
-                if not args.quiet:
+                if args.date:
                     date = get_date()
-                    logging.info(date + ': Pinging!')
+                    logging.info(date + ': pinging!')
+                else:
+                    logging.info('pinging!')
 
                 send_and_compare(ep_out, ep_in, ping)
 
@@ -288,17 +292,6 @@ def main():
             logging.info('Waiting for watchdog module to be connected...')
         laststatus=State.DISCONNECTED
         time.sleep(2)
-
-
-    # Test a range of inputs and show the reply from the module
-    #print('Dec\tHex\tReply\tBinary')
-    #for x in range(126,256):
-        #ret=send_and_receive(epout, epin, chr(x))
-        #rethex=toHex(ret)
-        #retbin=bin(int(rethex,16))[2:].zfill(16)
-        #print(str(x)+'\t'+hex(x)[:4]+'\t0x'+rethex[:4])
-        ##print(str(x)+'\t'+hex(x)+'\t0x'+rethex+'\t'+str(retbin))
-        #time.sleep(0.2)
 
     logging.info('Closing down')
 

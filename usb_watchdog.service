@@ -5,7 +5,7 @@ Description=USB Watchdog
 Type=exec
 User=root
 Group=root
-ExecStart=/usr/local/sbin/usb_watchdog.py
+ExecStart=/usr/local/sbin/usb_watchdog.py --systemd
 
 Restart=always
 RestartSec=5
