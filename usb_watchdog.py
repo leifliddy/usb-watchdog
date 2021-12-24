@@ -212,7 +212,6 @@ def main():
 
     args = parser.parse_args()
 
-
     if not 1 <= args.interval <= 299:
        print('The interval specified {} is not between 1 and 299'.format(args.interval))
        print('exiting...')
@@ -238,6 +237,8 @@ def main():
         logger.addHandler(ch)
 
 
+    if args.quiet:
+        logger.disabled = True
     if args.debug:
         logger.setLevel(logging.DEBUG)
     else:
