@@ -43,13 +43,15 @@ options:
   -r, --restart         Restart system via the watchdog USB device
   -d, --debug           Output verbose debugging information
   --date                Output date/time with each logging entry
-  -s, --systemd         Use the systemd/journald logging mechanism
+  --systemd             Use the systemd/journald logging mechanism
   -u USBVENDOR, --usbvendor USBVENDOR
                         usb vendor id, default value: 5131
   -p USBPRODUCT, --usbproduct USBPRODUCT
                         usb product id, default value: 2007
 
-```
+```I'll adjust the logging in a future update to make it systemd compatible and to not print the date/time (as systemd does that already)  
+79
+
 
 You can physically verify whether the ping/heartbeart messages are being received correctly by the usb-watchdog device.  
 Each time the device successfully receives a ping/heartbeat message, the blue led on the device will blink.
