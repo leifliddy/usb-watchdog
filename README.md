@@ -71,7 +71,6 @@ Dec 24 06:31:11 black.example.com usb_watchdog[117201]: pinging!
 Dec 24 06:31:21 black.example.com usb_watchdog[117201]: pinging!
 Dec 24 06:31:31 black.example.com usb_watchdog[117201]: pinging!
 Dec 24 06:31:41 black.example.com usb_watchdog[117201]: pinging!
-
 ```
 
 Also, you can start the ```usb_watchdog``` service without needing the usb-watchdog device to be plugged in.  
