@@ -206,7 +206,7 @@ def main():
     parser.add_argument('-r','--restart', action='store_true', help='Restart system via the watchdog USB device')
     parser.add_argument('-d','--debug', action='store_true', help='Output verbose debugging information')
     parser.add_argument('--date', action='store_true', help='Output date/time with each logging entry')
-    parser.add_argument('-s','--systemd', action='store_true', help='Use the systemd/journal logging mechanism')
+    parser.add_argument('-s','--systemd', action='store_true', help='Use the systemd/journald logging mechanism')
     parser.add_argument('-u', '--usbvendor', action='store', type=str, default=usb_vendor_id, help='usb vendor id, default value: 5131')
     parser.add_argument('-p', '--usbproduct', action='store', type=str, default=usb_product_id, help='usb product id, default value: 2007')
 
@@ -216,7 +216,16 @@ def main():
     if not 1 <= args.interval <= 299:
        print('The interval specified {} is not between 1 and 299'.format(args.interval))
        print('exiting...')
-       sys.exit(1)
+       sys.exit(1)                        Watchdog ping interval in seconds, needs to be under 300, default value: 10
+  -q, --quiet           Silences all output
+  -r, --restart         Restart system via the watchdog USB device
+  -d, --debug           Output verbose debugging information
+  --date                Output date/time with each logging entry
+  -s, --systemd         Use the systemd/journal logging mechanism
+  -u USBVENDOR, --usbvendor USBVENDOR
+                        usb vendor id, default value: 5131
+  -p USBPRODUCT, --usbproduct USBPRODUCT
+                        usb product id, default value: 2007
 
     if args.usbvendor:
         usb_vendor_id = hex(int(args.usbvendor, 16))
