@@ -217,15 +217,6 @@ def main():
        print('The interval specified {} is not between 1 and 299'.format(args.interval))
        print('exiting...')
        sys.exit(1)                        Watchdog ping interval in seconds, needs to be under 300, default value: 10
-  -q, --quiet           Silences all output
-  -r, --restart         Restart system via the watchdog USB device
-  -d, --debug           Output verbose debugging information
-  --date                Output date/time with each logging entry
-  -s, --systemd         Use the systemd/journal logging mechanism
-  -u USBVENDOR, --usbvendor USBVENDOR
-                        usb vendor id, default value: 5131
-  -p USBPRODUCT, --usbproduct USBPRODUCT
-                        usb product id, default value: 2007
 
     if args.usbvendor:
         usb_vendor_id = hex(int(args.usbvendor, 16))
