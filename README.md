@@ -19,14 +19,14 @@ If the device doesn't receive a ping/heartbeat message within a ```5 minute / 30
 After a ping/heartbeat is sent to the usb watchdog device, a read operation is performed to confirm that the device recieved the command.  
 If these values differ, an error message will display stating that the TX and RX values differ. 
 
-This script requiress the ```pyusb``` python library to run.  
+This script requires the ```pyusb``` and ```systemd-python``` python libraries to run.  
 You can install it via your distro's package management tool or via pip3
 
 **fedora package install**  
-```dnf install python3-pyusb```
+```dnf install python3-pyusb python3-systemd```
 
 **pip package install**  
-```pip3 install pyusb```
+```pip3 install systemd-python pyusb```
 
 **command options**  
 Should be pretty self-explanatory
@@ -38,14 +38,17 @@ usage: usb_watchdog.py [-h] [-i INTERVAL] [-q] [-r] [-d] [-u USBVENDOR] [-p USBP
 options:
   -h, --help            Show this help message and exit
   -i INTERVAL, --interval INTERVAL
-                        usb_watchdog ping interval in seconds, needs to be under 300, default value: 10
+                        Watchdog ping interval in seconds, needs to be under 300, default value: 10
   -q, --quiet           Silences all output
   -r, --restart         Restart system via the watchdog USB device
   -d, --debug           Output verbose debugging information
+  --date                Output date/time with each logging entry
+  -s, --systemd         Use the systemd/journald logging mechanism
   -u USBVENDOR, --usbvendor USBVENDOR
                         usb vendor id, default value: 5131
   -p USBPRODUCT, --usbproduct USBPRODUCT
                         usb product id, default value: 2007
+
 ```
 
 You can physically verify whether the ping/heartbeart messages are being received correctly by the usb-watchdog device.  
@@ -64,14 +67,13 @@ systemctl enable --now usb_watchdog.service
 
 running ```journalctl -f``` will show you the ping intervals
 ```
-Dec 22 08:53:19 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:19: Pinging!
-Dec 22 08:53:29 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:29: Pinging!
-Dec 22 08:53:39 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:39: Pinging!
-Dec 22 08:53:49 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:49: Pinging!
-Dec 22 08:53:59 black.example.com usb_watchdog.py[27005]: INFO     Dec 22 08:53:59: Pinging!
-```
+Dec 24 06:31:01 black.example.com usb_watchdog[117201]: pinging!
+Dec 24 06:31:11 black.example.com usb_watchdog[117201]: pinging!
+Dec 24 06:31:21 black.example.com usb_watchdog[117201]: pinging!
+Dec 24 06:31:31 black.example.com usb_watchdog[117201]: pinging!
+Dec 24 06:31:41 black.example.com usb_watchdog[117201]: pinging!
 
-I'll adjust the logging in a future update to make it systemd compatible and to not print the date/time (as systemd does that already)  
+```
 
 Also, you can start the ```usb_watchdog``` service without needing the usb-watchdog device to be plugged in.  
 If/when the device is plugged in at a later time, the service will identify, connect, and start communicating with it.
