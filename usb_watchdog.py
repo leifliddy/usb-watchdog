@@ -216,7 +216,7 @@ def main():
     if not 1 <= args.interval <= 299:
        print('The interval specified {} is not between 1 and 299'.format(args.interval))
        print('exiting...')
-       sys.exit(1)                        Watchdog ping interval in seconds, needs to be under 300, default value: 10
+       sys.exit(1)
 
     if args.usbvendor:
         usb_vendor_id = hex(int(args.usbvendor, 16))
