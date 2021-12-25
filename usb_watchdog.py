@@ -39,7 +39,6 @@ def fatal_error(message=None):
 
 def enum(*args):
     # Used to declare an 'enum' dynamically
-
     enums = dict(zip(args, range(len(args))))
     return type('Enum', (), enums)
 
