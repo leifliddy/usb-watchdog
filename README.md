@@ -16,7 +16,7 @@ This device accepts the following commands/messages which are comprised of two b
 
 If the device doesn't receive a "ping" message within the ```timeout``` period, the relays will be triggered, which causes the connected system to reboot.   
 \
-**initial timeout**: ```120 seconds``` before the device receives its first ping message
+**initial timeout**: ```120 seconds``` this is the inital timeout value placed on the device, which will change after the device receives its first ping message
 \
 **normal timeout**: ```290 seconds``` after the device receives its first ping message, the timeout value changes from ```120 seconds``` to (approx) ```290 seconds```   
 
