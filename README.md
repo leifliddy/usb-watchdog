@@ -14,11 +14,11 @@ This device accepts the following commands/messages which are comprised of two b
 **ping:** ['0x1e', '0x00']  
 **restart:** ['0xff', '0x55']
 
-If the device doesn't receive a "ping" message within the ```timeout``` period, the relays will be triggered which causes the connected system to reboot.   
+If the device doesn't receive a "ping" message within the ```timeout``` period, the relays will be triggered, which causes the connected system to reboot.   
 \
-**initial timeout**: ```120 seconds``` this is the timeout value used after plugging the usb watchdog device into a usb port and before it receives a ping. Basically, if you just plugin the device and don't do anything.   
+**initial timeout**: ```120 seconds``` before the device receives its first ping message
 \
-**normal timeout**: ```290 seconds``` this is the timeout value that's used after the usb watchdog device receives a ping. After the device receives the first ping message, the timeout value changes from ```120 seconds``` to (approx) ```290 seconds```   
+**normal timeout**: ```290 seconds``` after the device receives its first ping message, the timeout value changes from ```120 seconds``` to (approx) ```290 seconds```   
 
 After a ping message is sent to the usb watchdog device, a read operation is performed to confirm that the device actually received the message.  
 If these values differ, an error message will be displayed showing what bytes were transferred and what bytes were received. 
