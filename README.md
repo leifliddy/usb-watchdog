@@ -16,7 +16,12 @@ This device accepts the following commands comprised of two bytes:
 
 If the device doesn't receive a ping/heartbeat message within a ```5 minute / 300 second``` period, the relays will be triggered, causing the system to reboot.   
 After a ping/heartbeat is sent to the usb watchdog device, a read operation is performed to confirm that the device recieved the command.  
-If these values differ, an error message will display stating that the TX and RX values differ. 
+If these values differ, an error message will be displayed:
+```
+WARNING  Watchdog's TX and RX don't match
+TX 0x1e00
+RX 0x0eff
+```
 
 This script requires the ```pyusb``` and ```systemd-python``` python libraries to run.  
 You can install it via your distro's package management tool or via pip3
