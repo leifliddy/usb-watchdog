@@ -201,11 +201,11 @@ def main():
 
     parser.add_argument('-h','--help', action='help', help='Show this help message and exit')
     parser.add_argument('-i', '--interval', action='store', type=int, default=10, help='Watchdog ping interval in seconds, needs to be under 300, default value: 10')
-    parser.add_argument('-q','--quiet', action='store_true', help='Silences all output')
-    parser.add_argument('-r','--restart', action='store_true', help='Restart system via the watchdog USB device')
-    parser.add_argument('-d','--debug', action='store_true', help='Output verbose debugging information')
-    parser.add_argument('--date', action='store_true', help='Output date/time with each logging entry')
-    parser.add_argument('--systemd', action='store_true', help='Use the systemd/journald logging mechanism')
+    parser.add_argument('-q','--quiet', action='store_true', help='silences all output')
+    parser.add_argument('-r','--restart', action='store_true', help='send the restart command to the USB watchdog device')
+    parser.add_argument('-d','--debug', action='store_true', help='output debug info')
+    parser.add_argument('--date', action='store_true', help='output date/time with each logging entry')
+    parser.add_argument('--systemd', action='store_true', help='use the systemd/journald logging mechanism')
     parser.add_argument('-u', '--usbvendor', action='store', type=str, default=usb_vendor_id, help='usb vendor id, default value: 5131')
     parser.add_argument('-p', '--usbproduct', action='store', type=str, default=usb_product_id, help='usb product id, default value: 2007')
 
