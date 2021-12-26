@@ -200,7 +200,7 @@ def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, add_help=False)
 
     parser.add_argument('-h','--help', action='help', help='Show this help message and exit')
-    parser.add_argument('-i', '--interval', action='store', type=int, default=10, help='Watchdog ping interval in seconds, needs to be under 300, default value: 10')
+    parser.add_argument('-i', '--interval', action='store', type=int, default=10, help='Watchdog ping interval in seconds, should be under 230, default value: 10')
     parser.add_argument('-q','--quiet', action='store_true', help='silences all output')
     parser.add_argument('-r','--restart', action='store_true', help='send the restart command to the USB watchdog device')
     parser.add_argument('-d','--debug', action='store_true', help='output debug info')
@@ -211,8 +211,8 @@ def main():
 
     args = parser.parse_args()
 
-    if not 1 <= args.interval <= 299:
-       print('The interval specified {} is not between 1 and 299'.format(args.interval))
+    if not 1 <= args.interval <= 229:
+       print('The interval specified {} is not between 1 and 229'.format(args.interval))
        print('exiting...')
        sys.exit(1)
 
