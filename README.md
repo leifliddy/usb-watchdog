@@ -8,7 +8,7 @@ and supports the following (HID) usb-watchdog device:
 
 It's confusing as there seems to be many devices like this on the market using the same ```5131:2007``` id. 
 
-The main difference between this device and ```Progman2K's``` device is the command format 
+The main difference between this device and ```Progman2K's``` device and that this device doesn't have an integrated power button, also the command format is different.
 
 This device accepts the following commands comprised of two bytes:  
 **ping/hearbeat:** ['0x1e', '0x00']  
