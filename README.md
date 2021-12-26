@@ -11,16 +11,16 @@ It's confusing as there seems to be many devices like this on the market using t
 The main difference between this device and ```Progman2K's``` device and that this device doesn't have an integrated power button, also the command format is different.
 
 This device accepts the following commands/messages which are comprised of two bytes:  
-**ping/hearbeat:** ['0x1e', '0x00']  
+**ping:** ['0x1e', '0x00']  
 **restart:** ['0xff', '0x55']
 
-If the device doesn't receive a ping/heartbeat message within the ```timeout``` period, the relays will be triggered which causes the connected system to reboot.   
+If the device doesn't receive a "ping" message within the ```timeout``` period, the relays will be triggered which causes the connected system to reboot.   
 \
-**initial timeout**: ```120 seconds``` this is the timeout value used after plugging the usb watchdog device into a usb port and before it receives a ping/heartbeat message. Basically, if you just plugin the device and don't do anything.   
+**initial timeout**: ```120 seconds``` this is the timeout value used after plugging the usb watchdog device into a usb port and before it receives a ping. Basically, if you just plugin the device and don't do anything.   
 \
-**normal timeout**: ```290 seconds``` this is the timeout value that's used after the usb watchdog device receives a ping/heartbeat message. After the device receives the first ping/heartbeat message, the timeout value changes from ```120 seconds``` to (approx) ```290 seconds```   
+**normal timeout**: ```290 seconds``` this is the timeout value that's used after the usb watchdog device receives a ping. After the device receives the first ping message, the timeout value changes from ```120 seconds``` to (approx) ```290 seconds```   
 
-After a ping/heartbeat message is sent to the usb watchdog device, a read operation is performed to confirm that the device actually received the message.  
+After a ping message is sent to the usb watchdog device, a read operation is performed to confirm that the device actually received the message.  
 If these values differ, an error message will be displayed showing what bytes were transferred and what bytes were received. 
 ```
 WARNING  Watchdog's TX and RX don't match
@@ -60,8 +60,7 @@ options:
                         usb product id, default value: 2007
 ```
 
-You can physically verify whether the ping/heartbeart messages are being received correctly by the usb-watchdog device.  
-Each time the device successfully receives a ping/heartbeat message, the blue led on the device will blink.
+Each time the device successfully receives a ping message, the blue led on the device will blink.
 
 
 **setup the usb_watchdog service**  
