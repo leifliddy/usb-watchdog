@@ -3,9 +3,8 @@
 This project is largley based off of ```Progman2K's``` repo https://github.com/Progman2k/USB_Watchdog   
 and supports the following (HID) usb-watchdog device:  
 
+```lsusb``` output:  
 ```ID 5131:2007 MSR MSR-101U Mini HID magnetic card reader```
-
-\*\*use the ```lsusb``` command to find connected usb device info
 
 It's confusing as there seems to be many devices like this on the market using the same ```5131:2007``` id. 
 
