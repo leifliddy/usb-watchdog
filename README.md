@@ -15,7 +15,7 @@ This device accepts the following commands comprised of two bytes:
 **restart:** ['0xff', '0x55']
 
 If the device doesn't receive a ping/heartbeat message within a ```5 minute / 300 second``` period, the relays will be triggered, causing the system to reboot.   
-After a ping/heartbeat is sent to the usb watchdog device, a read operation is performed to confirm that the device recieved the command.  
+After a ping/heartbeat is sent to the usb watchdog device, a read operation is performed to confirm that the device received the command.  
 If these values differ, an error message will be displayed:
 ```
 WARNING  Watchdog's TX and RX don't match
