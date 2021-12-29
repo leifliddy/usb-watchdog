@@ -21,12 +21,13 @@ If the device doesn't receive a "ping" message within the ```timeout``` period, 
 **normal timeout**: ```290 seconds``` after the device receives its first ping message, the timeout value changes from ```120 seconds``` to (approx) ```290 seconds```   
 
 After a ping message is sent to the usb watchdog device, a read operation is performed to confirm that the device actually received the message.  
-If these values differ, an error message will be displayed showing what bytes were transferred and what bytes were received. 
+If these values differ, an error message will be displayed showing what bytes were transferred and what bytes were received.
 ```
 WARNING  Watchdog's TX and RX don't match
 TX 0x1e00
 RX 0x0eff
 ```
+\*\* errors like this should never happen, just know that the receipt of each transmitted ping message is being verfied.  
 
 **python libraries**  
 This script requires the ```pyusb``` and ```systemd-python``` python libraries  
