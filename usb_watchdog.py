@@ -21,7 +21,7 @@ def fatal_error(message=None):
     try:
         if message:
             # I prefer this format on screen.
-            print('\nFATAL ERROR: ' + message, file=sys.stderr)
+            print(f'\nFATAL ERROR: {message}', file=sys.stderr)
             # Now ensure the console streamhandler will reject this
             # by setting its level too high.
             logging.getLogger().handlers[0].setLevel(logging.CRITICAL)
@@ -54,11 +54,11 @@ def get_date():
 
 def send_and_receive(ep_out, ep_in, dout):
     # Send a packet and return the USB device's reply as a string
-    logging.debug('TX  0x' + str(dout.hex()))
+    logging.debug(f'TX  0x{str(dout.hex())}')
     ep_out.write(dout)
     data_read = ep_in.read(ep_in.bEndpointAddress, 16)
     din = ''.join('%02x' %i for i in data_read)
-    logging.debug('RX  0x' + din + '\n')
+    logging.debug(f'RX  0x{din}\n')
 
     return din
 
@@ -72,7 +72,7 @@ def send_and_compare(ep_out, ep_in, dout):
     dout_hex = dout.hex()
 
     if dout_hex != din_hex:
-      logging.warning("Watchdog's TX and RX don't match\nTX 0x" + dout_hex + '\nRX 0x' + din_hex + '\n')
+      logging.warning(f"Watchdog's TX and RX don't match\nTX 0x{dout_hex}\nRX 0x{din_hex}\n")
     return dout_hex == din_hex
 
 #############################################################################
@@ -85,7 +85,7 @@ def drain_usb(ep_in):
     try:
         for i in range(0,256):
             tmp = ep_in.read(1024,10)
-            logging.debug('Drained ' + len(tmp) + ' bytes from USB endpoint')
+            logging.debug(f'Drained {len(tmp)} bytes from USB endpoint')
     except usb.USBError:
         logging.debug('Finished attempts to drain')
         pass
@@ -99,7 +99,7 @@ def usb_init(usb_vendor_id, usb_product_id, quiet=False):
         usb_vendor_id = int(usb_vendor_id,16)
     if isinstance(usb_product_id, str):
         usb_product_id = int(usb_product_id,16)
-    logging.debug('Looking for device with idVendor ' + hex(usb_vendor_id) + ', idProduct ' + hex(usb_product_id))
+    logging.debug(f'Looking for device with idVendor {hex(usb_vendor_id)}, idProduct {hex(usb_product_id)}')
     dev = usb.core.find(idVendor=usb_vendor_id,idProduct=usb_product_id)
 
     if dev is None:
@@ -107,7 +107,7 @@ def usb_init(usb_vendor_id, usb_product_id, quiet=False):
     else:
         # We use 'repr(dev)' to get just the ID and bus info rather than
         # the full details that str(dev) would output.
-        logging.debug('Watchdog module found: '+repr(dev))
+        logging.debug(f'Watchdog module found: {repr(dev)}')
 
     reattach = False
     try:
@@ -212,7 +212,7 @@ def main():
     args = parser.parse_args()
 
     if not 1 <= args.interval <= 229:
-       print('The interval specified {} is not between 1 and 229'.format(args.interval))
+       print(f'The interval specified {args.interval} is not between 1 and 229')
        print('exiting...')
        sys.exit(1)
 
@@ -251,10 +251,10 @@ def main():
         try:
             dev, ep_out, ep_in = usb_init(args.usbvendor, args.usbproduct, quiet=args.quiet)
             laststatus=State.CONNECTED
-            logging.debug('usb_vendor_id: ' + usb_vendor_id)
-            logging.debug('usb_product_id: ' + usb_product_id + '\n')
-            logging.debug('ep_out\n' + str(ep_out) + '\n')
-            logging.debug('ep_in\n' + str(ep_in) + '\n')
+            logging.debug(f'usb_vendor_id: {usb_vendor_id}')
+            logging.debug(f'usb_product_id: {usb_product_id}\n')
+            logging.debug(f'ep_out\n{str(ep_out)}\n')
+            logging.debug(f'ep_in\n{str(ep_in)}\n')
 
             while True:
                 if args.restart:
@@ -264,7 +264,7 @@ def main():
 
                 if args.date:
                     date = get_date()
-                    logging.info(date + ': pinging!')
+                    logging.info(f'{date}: pinging!')
                 else:
                     logging.info('pinging!')
 
@@ -272,16 +272,16 @@ def main():
 
                 time.sleep(args.interval)
         except ValueError as e:
-            logging.debug('Encountered ValueError:\n'+repr(e)+'\n')
+            logging.debug(f'Encountered ValueError:\n{repr(e)}\n')
         except usb.USBError as e:
             etype, evalue, etraceback = sys.exc_info()
-            #logging.debug('USBError:\n  type: ' + str(etype) + '\n  value: ' + str(evalue) + '\n  traceback: ' + str(etraceback))
+            #logging.debug(f'USBError:\n  type: {str(etype)}\n  value: {str(evalue)}\n  traceback: {str(etraceback)}')
             if evalue.errno == errno.EACCES:
                 logging.error('Insufficient permissions to access the device.\nThis is an OS problem you must correct.')
             # Don't bother showing an error if we were still initializing
             if laststatus == State.CONNECTED:
                 logging.error('USB communication error or device removed.')
-                logging.debug('Encountered USBError:\n'+repr(e)+'\n')
+                logging.debug(f'Encountered USBError:\n{repr(e)}\n')
         # Clean up as best we can and try again
         usb_cleanup()
         # If our first effort to find the module failed we should give
@@ -306,4 +306,4 @@ if __name__ == '__main__':
         print('\n')
         fatal_error('User pressed CTRL+C, aborting...')
     #except Exception as e:
-        #fatal_error('Exception: ' + repr(e))
+        #fatal_error(f'Exception: {repr(e)})
