@@ -31,7 +31,7 @@ RX 0x0eff
 
 **python libraries**  
 This script requires the ```pyusb``` and ```systemd-python``` python libraries  
-You can install it via your distro's package management tool or via pip3
+You can install them via your distro's package management tool or via pip3
 
 **fedora package install**  
 ```dnf install python3-pyusb python3-systemd```
