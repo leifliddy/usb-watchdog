@@ -230,7 +230,6 @@ def main():
     else:
         # create console handler and set level to debug
         ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
         formatter = logging.Formatter('%(levelname)-8s %(message)s')
         ch.setFormatter(formatter)
         logger.addHandler(ch)
