@@ -44,14 +44,6 @@ def enum(*args):
 
 #############################################################################
 
-def get_date():
-    # format: Dec 20 07:38:10
-    date = datetime.today().strftime('%b %d %H:%M:%S')
-
-    return date
-
-#############################################################################
-
 def send_and_receive(ep_out, ep_in, dout):
     # Send a packet and return the USB device's reply as a string
     logging.debug(f'TX  0x{str(dout.hex())}')
@@ -204,7 +196,6 @@ def main():
     parser.add_argument('-q','--quiet', action='store_true', help='silences all output')
     parser.add_argument('-r','--restart', action='store_true', help='send the restart command to the USB watchdog device')
     parser.add_argument('-d','--debug', action='store_true', help='output debug info')
-    parser.add_argument('--date', action='store_true', help='output date/time with each logging entry')
     parser.add_argument('--systemd', action='store_true', help='use the systemd/journald logging mechanism')
     parser.add_argument('-u', '--usbvendor', action='store', type=str, default=usb_vendor_id, help='usb vendor id, default value: 5131')
     parser.add_argument('-p', '--usbproduct', action='store', type=str, default=usb_product_id, help='usb product id, default value: 2007')
@@ -222,7 +213,6 @@ def main():
     if args.usbproduct:
         usb_product_id = hex(int(args.usbproduct, 16))
 
-
     logger = logging.getLogger()
 
     if args.systemd:
@@ -230,7 +220,7 @@ def main():
     else:
         # create console handler and set level to debug
         ch = logging.StreamHandler()
-        formatter = logging.Formatter('%(levelname)-8s %(message)s')
+        formatter = logging.Formatter('%(levelname)-8s %(asctime)-19s %(message)s', datefmt='%b %d %H:%M:%S') 
         ch.setFormatter(formatter)
         logger.addHandler(ch)
 
@@ -261,12 +251,7 @@ def main():
                     send_and_compare(ep_out, ep_in, restart)
                     sys.exit()
 
-                if args.date:
-                    date = get_date()
-                    logging.info(f'{date}: pinging!')
-                else:
-                    logging.info('pinging!')
-
+                logging.info('pinging!')
                 send_and_compare(ep_out, ep_in, ping)
 
                 time.sleep(args.interval)
